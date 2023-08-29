@@ -9,11 +9,11 @@ function App({ childern }) {
 
 
   return (
-    <div  className="bg-slate-200 h-full">
+    <di>
       <RouterProvider router={router}>
         {childern}
       </RouterProvider>
-    </div>
+    </di>
   )
 }
 

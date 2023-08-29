@@ -20,11 +20,12 @@ export const Navber = () => {
 
 
   const navItem = <>
-    <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><GoHomeFill></GoHomeFill> <p className='text-center text-xs'>Home</p></Link>
+    <Link to="/home" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><GoHomeFill></GoHomeFill> <p className='text-center text-xs'>Home</p></Link>
     <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><HiViewGridAdd></HiViewGridAdd><p className='text-center text-xs'>My Network</p></Link>
     <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><BiSolidShoppingBagAlt></BiSolidShoppingBagAlt><p className='text-center text-xs'>Jobs</p></Link>
     <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><BsChatDotsFill></BsChatDotsFill><p className='text-center text-xs'>Messaging</p></Link>
-    <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Notification</p></Link>
+    <Link to="" className='text-[28px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Notification</p></Link>
+    <Link to="/login" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Login</p></Link>
     <Link onClick={toggleMenu} className="hidden md:block text-[24px] pb-0 mb-0 md:flex flex-col justify-center items-center">
 
       <div className="avatar">
@@ -40,11 +41,13 @@ export const Navber = () => {
   return (
     <div>
       <nav className="bg-white shadow-sm">
-        <div className="container mx-auto px-2 py-3">
+        <div className="container mx-auto px-5 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div className="text-blue-800 font-semibold text-xl">
-                <span className="font-extrabold  mr-2 text-white rounded-md p-1 px-2 md:text-2xl bg-indigo-600">Pro</span>
+              <div className="text-purple-800 font-semibold text-xl">
+                <span className="font-extrabold flex items-center  mr-2 text-white  p-1 px-2 md:text-2xl ">
+                  <p className='bg-purple-800 px-[5px] rounded-md mr-[1px]'>Pro</p>
+                  <span className="text-purple-800">Link</span></span>
               </div>
 
               <div className="form-control">
@@ -74,7 +77,7 @@ export const Navber = () => {
 
 
 
-        <div className={` ${isOpen ? 'block flex p-5 flex-col  rounded shadow-2xl absolute right-72 text-center justify-end w-80  mt-3' : 'hidden'}`}>
+        <div className={` ${isOpen ? 'block flex bg-white z-50 p-5 flex-col  rounded shadow-2xl absolute right-72 text-center justify-end w-80  mt-3' : 'hidden'}`}>
           <div className='flex gap-2'>
             <img className='w-16 h-16 border rounded-full' src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" alt="" />
             <div className='text-start'>
@@ -83,7 +86,7 @@ export const Navber = () => {
             </div>
           </div>
 
-          <Link className='border-2 rounded-3xl border-blue-800 mt-3 px-3 '>View Profile</Link>
+          <Link className='border-2 hover:bg-slate-300 duration-700 rounded-3xl text-purple-800 font-semibold border-purple-800 mt-3 px-3 '>View Profile</Link>
 
           <div className='text-start  mt-3'>
             <h4 className='font-semibold text-xl'>Account</h4>
@@ -98,7 +101,7 @@ export const Navber = () => {
 
 
         <div>
-          <div className="md:hidden py-1 px-2 absolute bottom-0 flex border w-full items-center justify-between">
+          <div className="md:hidden py-1 px-5 absolute bottom-0 flex border w-full items-center justify-between">
             {navItem}
           </div>
         </div>

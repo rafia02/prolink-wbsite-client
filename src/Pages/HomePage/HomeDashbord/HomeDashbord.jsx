@@ -1,7 +1,10 @@
 import React from 'react'
+import { PostDesign } from './PostDesign'
 
 export const HomeDashbord = () => {
   return (
-    <div>HomeDashbord</div>
+    <div>
+      <PostDesign></PostDesign>
+    </div>
   )
 }
