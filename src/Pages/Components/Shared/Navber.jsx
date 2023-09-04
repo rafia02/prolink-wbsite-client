@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo from "../../../Images/logo2.png"
 import "../../../App.css"
 import { GoHomeFill } from "react-icons/go";
@@ -9,8 +9,11 @@ import { MdNotifications } from "react-icons/md";
 import { CgMenuGridR } from "react-icons/cg";
 
 import { BiSolidShoppingBag, BiSolidShoppingBagAlt, BiSolidDownArrow } from "react-icons/bi";
+import { authContext } from '../../../Context/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 export const Navber = () => {
+  const {logout, user} = useContext(authContext)
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,35 +22,61 @@ export const Navber = () => {
   };
 
 
-  const navItem = <>
-    <Link to="/home" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><GoHomeFill></GoHomeFill> <p className='text-center text-xs'>Home</p></Link>
-    <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><HiViewGridAdd></HiViewGridAdd><p className='text-center text-xs'>My Network</p></Link>
-    <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><BiSolidShoppingBagAlt></BiSolidShoppingBagAlt><p className='text-center text-xs'>Jobs</p></Link>
-    <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><BsChatDotsFill></BsChatDotsFill><p className='text-center text-xs'>Messaging</p></Link>
-    <Link to="" className='text-[28px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Notification</p></Link>
-    <Link to="/login" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Login</p></Link>
-    <Link onClick={toggleMenu} className="hidden md:block text-[24px] pb-0 mb-0 md:flex flex-col justify-center items-center">
+  const handleSingout =()=>{
+    logout()
+    .then(()=>{
+      toast.success("Sign out successfully")
+    })
+    .catch(e => console.error(e))
+  }
 
-      <div className="avatar">
-        <div className="w-[26px] rounded-full ">
-          <img src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" />
-        </div>
+
+  const navItem = <>
+    
+
+{
+  user?.email ? 
+  
+  <>
+  <Link to="/home" className='text-xl pb-0 mb-0 flex flex-col justify-center items-center'><GoHomeFill></GoHomeFill> <p className='text-center text-xs'>Home</p></Link>
+  <Link to="" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><HiViewGridAdd></HiViewGridAdd><p className='text-center text-xs'>My Network</p></Link>
+  <Link to="" className='text-[25px] pb-0 mb-0 flex flex-col justify-center items-center'><BiSolidShoppingBagAlt></BiSolidShoppingBagAlt><p className='text-center text-xs'>Jobs</p></Link>
+  <Link to="" className='text-[23px] pb-0 mb-0 flex flex-col justify-center items-center'><BsChatDotsFill></BsChatDotsFill><p className='text-center text-xs'>Messaging</p></Link>
+  <Link to="" className='text-[26px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Notification</p></Link>
+  {/* <Link to="/login" className='text-[24px] pb-0 mb-0 flex flex-col justify-center items-center'><MdNotifications></MdNotifications><p className='text-center text-xs'>Login</p></Link> */}
+  <Link onClick={toggleMenu} className="hidden md:block text-[24px] pb-0 mb-0 md:flex flex-col justify-center items-center">
+
+    <div className="avatar">
+      <div className="w-[26px] rounded-full ">
+        <img src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" />
       </div>
-      <p className='flex items-center text-center text-xs'>Me<BiSolidDownArrow></BiSolidDownArrow></p>
-    </Link>
+    </div>
+    <p className='flex items-center text-center text-xs'>Me<BiSolidDownArrow></BiSolidDownArrow></p>
+  </Link>
+  </>
+  :
+  
+  <>
+  <Link to="/login" className='text-xl  bg-blue-800 text-white px-5 rounded-md hover:opacity-80 duration-300 py-2 font-semibold '>Sign in</Link>
+  <Link to="/signup" className='text-xl bg-blue-800 font-semibold text-white px-5 rounded-md hover:opacity-80 py-2 duration-300 '>Register Now</Link>
+  
+  </>
+}
+
+    
   </>
 
 
   return (
     <div>
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white shadow-md py-1">
         <div className="container mx-auto px-5 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div className="text-purple-800 font-semibold text-xl">
+              <div className="text-blue-800 font-semibold text-xl">
                 <span className="font-extrabold flex items-center  mr-2 text-white  p-1 px-2 md:text-2xl ">
-                  <p className='bg-purple-800 px-[5px] rounded-md mr-[1px]'>Pro</p>
-                  <span className="text-purple-800">Link</span></span>
+                  <p className='bg-blue-900 px-[5px] rounded-md mr-[1px]'>Pro</p>
+                  <span className="text-blue-900">Link</span></span>
               </div>
 
               <div className="form-control">
@@ -86,13 +115,14 @@ export const Navber = () => {
             </div>
           </div>
 
-          <Link className='border-2 hover:bg-slate-300 duration-700 rounded-3xl text-purple-800 font-semibold border-purple-800 mt-3 px-3 '>View Profile</Link>
+          <Link className='border-2 hover:bg-slate-300 duration-700 rounded-3xl text-blue-800 font-semibold border-blue-800 mt-3 px-3 '>View Profile</Link>
 
           <div className='text-start  mt-3'>
             <h4 className='font-semibold text-xl'>Account</h4>
-            <p className='my-2'>Settings & Privacy</p>
-            <p>Help</p>
-            <p className='my-3'>Language</p>
+            <p className='my-2 hover:cursor-pointer hover:text-amber-600 duration-300'>Settings & Privacy</p>
+            <p className='hover:cursor-pointer hover:text-amber-600 duration-300'>Help</p>
+            <p className='my-3 hover:cursor-pointer hover:text-amber-600 duration-300'>Language</p>
+            <p onClick={handleSingout} className='my-3 mt-2 hover:cursor-pointer hover:text-amber-600 duration-300 font-bold'>Sign Out</p>
           </div>
         </div>
 
@@ -101,7 +131,7 @@ export const Navber = () => {
 
 
         <div>
-          <div className="md:hidden py-1 px-5 absolute bottom-0 flex border w-full items-center justify-between">
+          <div className="md:hidden bg-white  py-1 px-5 fixed  bottom-0 flex border w-full items-center justify-between">
             {navItem}
           </div>
         </div>

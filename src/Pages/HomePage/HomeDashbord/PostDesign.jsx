@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdPhotoSizeSelectActual, MdTextSnippet } from "react-icons/md";
 import { BsYoutube } from "react-icons/bs";
-import { Modal } from './Modal';
+import { PostModal } from './PostModal';
 
 
 
@@ -16,7 +16,7 @@ export const PostDesign = () => {
 
                 <div className='flex items-center justify-between mt-4'>
                     <div className='flex items-center '>
-                        <MdPhotoSizeSelectActual className='text-purple-600 text-2xl mr-2'></MdPhotoSizeSelectActual>
+                        <MdPhotoSizeSelectActual className='text-blue-600 text-2xl mr-2'></MdPhotoSizeSelectActual>
                         <p>Photo</p>
                     </div>
                     <div className='flex items-center '>
@@ -30,7 +30,9 @@ export const PostDesign = () => {
                 </div>
             </div>
 
-            <Modal></Modal>
+            <div className="w-full h-40">
+                <PostModal></PostModal>
+            </div>
 
         </div>
     )

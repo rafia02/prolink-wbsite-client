@@ -4,16 +4,18 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './Router/Routers'
+import { Toaster } from 'react-hot-toast'
 
 function App({ childern }) {
 
 
   return (
-    <di>
+    <div>
       <RouterProvider router={router}>
         {childern}
       </RouterProvider>
-    </di>
+      <Toaster></Toaster>
+    </div>
   )
 }
 
