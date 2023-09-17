@@ -5,30 +5,30 @@ import { SinglePost } from './SinglePost';
 export const AllPosts = () => {
   
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-  const [allposts, setAllPosts] = useState([])
+  // const [allposts, setAllPosts] = useState([])
   
-  // const {data: allposts = [], refetch, isloader} = useQuery({
-  //   queryKey: ["posts"],
-  //   queryFn: async () => {
-  //     const res = await fetch("http://localhost:5000/allposts");
-  //     const data = await res.json()
-  //     return data
-  //   }
-  // })
+  const {data: allposts = [], refetch, isloader} = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/allposts");
+      const data = await res.json()
+      return data
+    }
+  })
 
-  useEffect(() => {
-    fetch("http://localhost:5000/allposts")
-      .then(res => res.json())
-      .then(data => {
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/allposts")
+  //     .then(res => res.json())
+  //     .then(data => {
         
-        setAllPosts(data)
-        forceUpdate()
+  //       setAllPosts(data)
+  //       forceUpdate()
 
-      })
-      .catch(e => console.error(e))
-  }, [])
+  //     })
+  //     .catch(e => console.error(e))
+  // }, [])
 
- 
+ refetch()
   console.log(allposts)
   return (
     <div className='mt-5'>

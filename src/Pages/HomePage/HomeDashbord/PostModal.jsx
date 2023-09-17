@@ -26,7 +26,7 @@ export const PostModal = () => {
     const [showUploadFile, setShowUploadFile] = useState(false);
     const [showVideo, setShowVideo] = useState(false);
     const [files, setFiles] = useState([])
-
+    let sum = []
     const handleEmojiClick = (emoji) => {
         console.log(emoji.native)
         setText(text + emoji.native);
@@ -40,12 +40,70 @@ export const PostModal = () => {
 
 
 
+    // const handleSubmit = (e) => {
+    //     e.preventDefault()
+
+
+    //     if (!files?.length) return
+    //     console.log("submit")
+
+    //     for (let i = 0; i < files.length; i++) {
+    //         const formData = new FormData();
+    //         formData.append('image', files[i][0])
+    //         const URL = "https://api.imgbb.com/1/upload?&key=4d5a64efec46b0e4ba427206e6bcef01"
+    //         const data = fetch(URL, {
+    //             method: 'POST',
+    //             body: formData
+    //         })
+    //             .then(res => res.json())
+    //             .then(data => {
+    //                 // console.log(data.data.url)
+    //                 setLinkss(...linkss, data.data.url)
+
+    //                 const postData = {
+    //                     img: data.data.url,
+    //                     email: user.email,
+    //                     text: e.target?.mgs.value
+
+
+    //                 }
+
+    //                 fetch(`http://localhost:5000/post`, {
+    //                     method: "POST",
+    //                     headers: {
+    //                         "Content-type": "application/json"
+    //                     },
+    //                     body: JSON.stringify(postData)
+    //                 })
+    //                     .then(res => res.json())
+    //                     .then(data => {
+    //                         console.log(data)
+    //                         e.target.reset()
+    //                         toast.success("successfully post")
+    //                         forceUpdate();
+    //                     })
+    //                     .catch(e => console.error(e))
+    //             })
+    //             .catch(e => console.error(e))
+
+
+
+
+    //     }
+
+
+
+    // }
+
+
+
     const handleSubmit = (e) => {
         e.preventDefault()
 
 
         if (!files?.length) return
         console.log("submit")
+   
 
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData();
@@ -57,32 +115,9 @@ export const PostModal = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    // console.log(data.data.url)
-                    setLinkss(...linkss, data.data.url)
-
-                    const postData = {
-                        img: data.data.url,
-                        email: user.email,
-                        text: e.target?.mgs.value
-
-
-                    }
-
-                    fetch(`http://localhost:5000/post`, {
-                        method: "POST",
-                        headers: {
-                            "Content-type": "application/json"
-                        },
-                        body: JSON.stringify(postData)
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            console.log(data)
-                            e.target.reset()
-                            toast.success("successfully post")
-                            forceUpdate();
-                        })
-                        .catch(e => console.error(e))
+                    console.log(data)
+                    // setLinkss(...linkss, data.data.url)
+                    sum.push(data.data.url)
                 })
                 .catch(e => console.error(e))
 
@@ -91,9 +126,46 @@ export const PostModal = () => {
 
         }
 
+        console.log(sum)
+
+
+        if(sum.length){
+            const postData = {
+                img: sum,
+                email: user.email,
+                text: e.target?.mgs.value
+    
+    
+            }
+            console.log(postData)
+    
+            fetch(`http://localhost:5000/post`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(postData)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    toast.success("successfully post")
+                    e.target.reset()
+                    forceUpdate();
+                })
+                .catch(e => console.error(e))
+        }
+
+
+       
 
 
     }
+
+
+
+
+
 
     return (
         <div className='relative'>
