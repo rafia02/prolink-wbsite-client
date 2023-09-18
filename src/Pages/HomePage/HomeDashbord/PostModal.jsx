@@ -149,8 +149,8 @@ export const PostModal = () => {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
-                    toast.success("successfully post")
                     e.target.reset()
+                    toast.success("successfully post")
                     forceUpdate();
                 })
                 .catch(e => console.error(e))
@@ -216,6 +216,7 @@ export const PostModal = () => {
                             />
                         }
                     </div>
+               
 
 
                     <div>

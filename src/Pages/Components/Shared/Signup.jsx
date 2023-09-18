@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { countries } from './countryName'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { authContext } from '../../../Context/AuthProvider';
@@ -11,10 +11,10 @@ import { toast } from 'react-hot-toast';
 
 
 export const Signup = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const { signupEmail, profileupdate } = useContext(authContext)
   const [open, setOpen] = useState(false)
-
+  const navigate = useNavigate()
 
 
 
@@ -30,18 +30,110 @@ export const Signup = () => {
     const fullName = `${data.first_name} ${data.last_name}`
     console.log(fullName)
 
+    const image = data.image[0]
+    const formData = new FormData();
+    formData.append("image", image);
+
+
+
     signupEmail(data.email, data.password)
+      // .then(res => {
+      //   console.log(res.user)
+      //   toast.success("Successly sign up")
+      //   fetch("https://api.imgbb.com/1/upload?&key=4d5a64efec46b0e4ba427206e6bcef01", {
+      //     method: "POST",
+      //     body: formData
+      //   })
+
+      //   profileupdate({ displayName: fullName, photoURL: imageData.data.url })
+      //     .then(() => { })
+      //     .catch(e => console.error(e))
+
+      //   const userData = {
+      //     username: fullName,
+      //     email: data.email,
+      //     country: data.country,
+      //     district: data.district,
+      //     title: data.title,
+      //     image: imageData.data.url
+      //   }
+
+      //   userPost(userData)
+      //   reset()
+      //   navigate("/")
+
+      // })
+
+
+
+
+
+
+
       .then(res => {
         console.log(res.user)
         toast.success("Successly sign up")
-        profileupdate({ displayName: data.fullName })
-          .then(() => { })
-          .catch(e => console.error(e))
+
+        fetch("https://api.imgbb.com/1/upload?&key=4d5a64efec46b0e4ba427206e6bcef01", {
+          method: "POST",
+          body: formData
+        })
+          .then((res) => res.json())
+          .then((imageData) => {
+            console.log(imageData.data.url)
+
+            profileupdate({ displayName: fullName, photoURL: imageData.data.url })
+              .then(() => { })
+              .catch(e => console.error(e))
+
+
+
+            const userData = {
+              username: fullName,
+              email: data.email,
+              country: data.country,
+              district: data.district,
+              title: data.title,
+              image: imageData.data.url
+            }
+            console.log("user info", userData)
+
+            userPost(userData)
+          })
+
+          .catch((err) => console.log(err))
+
+
 
       })
+
       .catch(e => console.error(e))
 
+
+
+
+
   };
+
+
+
+
+  function userPost(user) {
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        navigate("/home")
+        console.log(data)
+      })
+      .catch((e) => console.log(e))
+  }
+
 
 
 
@@ -115,6 +207,15 @@ export const Signup = () => {
             {...register("title", { required: true })} />
         </div>
 
+        <div className='flex flex-col mt-3'>
+          <label className='font-semibold '>Profile picture</label>
+          <input
+            type="file"
+            {...register("image")}
+            className="w-full mt-1 border-slate-600 p-[5px] border rounded"
+          />
+        </div>
+
         <div className='flex flex-col my-3'>
           <label className='font-semibold mb-1'>Password</label>
           <div className='flex gap-7 items-center'>
@@ -139,6 +240,8 @@ export const Signup = () => {
           {errors.password && <p className='text-red-600'>{errors.password?.message}</p>}
 
         </div>
+
+
 
 
 
