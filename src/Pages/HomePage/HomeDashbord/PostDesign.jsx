@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { MdPhotoSizeSelectActual, MdTextSnippet } from "react-icons/md";
 import { BsYoutube } from "react-icons/bs";
 import { PostModal } from './PostModal';
+import { authContext } from '../../../Context/AuthProvider';
 
 
 
 
 export const PostDesign = () => {
+    const {user} = useContext(authContext)
 
     return (
         <div className=''>
             <div className='bg-white p-5 rounded-md'>
                 <div className='flex items-center'>
-                    <img className='w-14 h-14 mr-4 rounded-full' src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" alt="" />
+                    <img className='w-14 h-14 mr-4 rounded-full' src={user?.photoURL} alt="" />
                     <input onClick={()=>window.my_modal_3.showModal()} className='border-2 border-slate-400 rounded-3xl p-3 w-full' type="text" name="" id="" placeholder='Start a post' />
                 </div>
 

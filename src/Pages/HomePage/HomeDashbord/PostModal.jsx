@@ -11,6 +11,7 @@ import Picker from '@emoji-mart/react'
 import { UploadFile } from '../../Components/Utilities/UploadFile';
 import { authContext } from '../../../Context/AuthProvider';
 import { toast } from 'react-hot-toast';
+import { useQuery } from 'react-query';
 
 
 
@@ -27,6 +28,16 @@ export const PostModal = () => {
     const [showVideo, setShowVideo] = useState(false);
     const [files, setFiles] = useState([])
     let sum = []
+
+    const { data: filterUser = [], refetch, isloader } = useQuery({
+        queryKey: ["user"],
+        queryFn: async () => {
+            const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
+            const data = await res.json()
+            return data
+        }
+    })
+
     const handleEmojiClick = (emoji) => {
         console.log(emoji.native)
         setText(text + emoji.native);
@@ -40,12 +51,15 @@ export const PostModal = () => {
 
 
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
+console.log(files)
+
+
+    // const handleImageUrl = () => {
 
 
     //     if (!files?.length) return
     //     console.log("submit")
+
 
     //     for (let i = 0; i < files.length; i++) {
     //         const formData = new FormData();
@@ -57,32 +71,9 @@ export const PostModal = () => {
     //         })
     //             .then(res => res.json())
     //             .then(data => {
-    //                 // console.log(data.data.url)
-    //                 setLinkss(...linkss, data.data.url)
-
-    //                 const postData = {
-    //                     img: data.data.url,
-    //                     email: user.email,
-    //                     text: e.target?.mgs.value
-
-
-    //                 }
-
-    //                 fetch(`http://localhost:5000/post`, {
-    //                     method: "POST",
-    //                     headers: {
-    //                         "Content-type": "application/json"
-    //                     },
-    //                     body: JSON.stringify(postData)
-    //                 })
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         console.log(data)
-    //                         e.target.reset()
-    //                         toast.success("successfully post")
-    //                         forceUpdate();
-    //                     })
-    //                     .catch(e => console.error(e))
+    //                 console.log(data)
+    //                 sum.push(data.data.url)
+    //                 toast.success("successfully image host")
     //             })
     //             .catch(e => console.error(e))
 
@@ -91,8 +82,7 @@ export const PostModal = () => {
 
     //     }
 
-
-
+    //     console.log(sum)
     // }
 
 
@@ -101,9 +91,10 @@ export const PostModal = () => {
         e.preventDefault()
 
 
+
         if (!files?.length) return
         console.log("submit")
-   
+
 
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData();
@@ -116,8 +107,8 @@ export const PostModal = () => {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
-                    // setLinkss(...linkss, data.data.url)
                     sum.push(data.data.url)
+                    toast.success("successfully image host")
                 })
                 .catch(e => console.error(e))
 
@@ -126,42 +117,48 @@ export const PostModal = () => {
 
         }
 
-        console.log(sum)
+        const postData = {
+            img: sum,
+            email: user.email,
+            text,
+            name: filterUser.username,
+            title: filterUser.title
 
+        }
+        console.log(postData)
 
-        if(sum.length){
-            const postData = {
-                img: sum,
-                email: user.email,
-                text: e.target?.mgs.value
-    
-    
-            }
-            console.log(postData)
-    
-            fetch(`http://localhost:5000/post`, {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify(postData)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data)
-                    e.target.reset()
-                    toast.success("successfully post")
-                    forceUpdate();
-                })
-                .catch(e => console.error(e))
+        if (sum.length) {
+
+           post(postData)
+            e.target.reset()
         }
 
 
-       
+
 
 
     }
+    
 
+
+    function post(postData) {
+        fetch(`http://localhost:5000/post`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                
+                toast.success("successfully post")
+                forceUpdate();
+            })
+            .catch(e => console.error(e))
+
+    }
 
 
 
@@ -181,33 +178,42 @@ export const PostModal = () => {
 
                     <div>
                         <textarea
-                            name='mgs'
+                         
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            className='w-full h-40 text-xl outline-none'
+                            className='w-full h-24 text-xl outline-none'
                             cols="30" rows="10"
                             placeholder='What do you want to talk about'>
                         </textarea>
 
-                        <ul className='grid grid-cols-3 gap-5 my-5'>
-                            {
-                                files.map(file => <li className='relative ' key={file[0].name}>
-                                    {
-                                        file[0].name.includes("mp4") ?
-                                            <video className='h-20 w-full rounded' controls src={file[0].preview}></video>
-                                            :
-                                            <img className='h-20 w-full rounded' src={file[0].preview} alt="" />
-                                    }
 
-                                    <div onClick={() => removeFile(file[0].name)} className='absolute top-[-12px] right-[-8px] duration-500  hover:text-red-500 mt-1'>
-                                        <RxCross2 className='text-xl bg-red-400 duration-500 hover:bg-red-500 p-[2px] text-white rounded-full font-extrabold '></RxCross2>
-                                    </div>
-                                </li>)
-                            }
-                        </ul>
+                            <ul className='grid grid-cols-3 gap-5  my-5'>
+                                {
+                                    files?.map(file => <li className='relative ' key={file[0].name}>
+                                        {
+                                            file[0].name.includes("mp4") ?
+                                                <video className='h-20 w-full rounded' controls src={file[0].preview}></video>
+                                                :
+                                                <img className='h-20 w-full rounded' src={file[0].preview} alt="" />
+                                        }
+
+                                        <div onClick={() => removeFile(file[0].name)} className='absolute top-[-12px] right-[-8px] duration-500  hover:text-red-500 mt-1'>
+                                            <RxCross2 className='text-xl bg-red-400 duration-500 hover:bg-red-500 p-[2px] text-white rounded-full font-extrabold '></RxCross2>
+                                        </div>
+                                    </li>)
+                                }
+
+
+                            </ul>
+
+                            {/* {
+                                files.length && <button onClick={handleImageUrl} className='bg-blue-500  hover:bg-blue-700 absolute right-5 bottom-[-1] duration-500 px-2 text-white font-bold rounded-full text-center'>Ok</button>
+                            } */}
+
+   
                     </div>
 
-                    <div >
+                    <div className='mt-16'>
                         {
                             showEmojiPicker &&
                             <Picker
@@ -216,7 +222,7 @@ export const PostModal = () => {
                             />
                         }
                     </div>
-               
+
 
 
                     <div>

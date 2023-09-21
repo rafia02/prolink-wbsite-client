@@ -11,11 +11,23 @@ import { CgMenuGridR } from "react-icons/cg";
 import { BiSolidShoppingBag, BiSolidShoppingBagAlt, BiSolidDownArrow } from "react-icons/bi";
 import { authContext } from '../../../Context/AuthProvider';
 import { toast } from 'react-hot-toast';
+import { useQuery } from 'react-query';
 
 export const Navber = () => {
   const {logout, user} = useContext(authContext)
 
   const [isOpen, setIsOpen] = useState(false);
+
+
+  const {data: filterUser = [], refetch, isloader} = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:5000/user?email=${user?.email}`);
+      const data = await res.json()
+      return data
+    }
+  })
+
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -48,7 +60,7 @@ export const Navber = () => {
 
     <div className="avatar">
       <div className="w-[26px] rounded-full ">
-        <img src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" />
+        <img src={user?.photoURL} />
       </div>
     </div>
     <p className='flex items-center text-center text-xs'>Me<BiSolidDownArrow></BiSolidDownArrow></p>
@@ -108,10 +120,10 @@ export const Navber = () => {
 
         <div className={` ${isOpen ? 'block flex bg-white z-50 p-5 flex-col  rounded shadow-2xl absolute right-72 text-center justify-end w-80  mt-3' : 'hidden'}`}>
           <div className='flex gap-2'>
-            <img className='w-16 h-16 border rounded-full' src="https://www.shutterstock.com/image-photo/jasna-lake-beautiful-reflections-mountains-260nw-1720823500.jpg" alt="" />
+            <img className='w-16 h-16 border rounded-full' src={user?.photoURL} alt="" />
             <div className='text-start'>
               <h4 className='font-semibold text-lg'>Rafia Binte Rashed</h4>
-              <p className='text-sm'>developer | front end developer | react js | node js| MERN developer</p>
+              <p className='text-sm'>{filterUser.title}</p>
             </div>
           </div>
 
