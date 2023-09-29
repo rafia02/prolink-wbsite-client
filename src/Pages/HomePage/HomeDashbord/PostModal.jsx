@@ -131,6 +131,9 @@ console.log(files)
 
            post(postData)
             e.target.reset()
+
+            
+
         }
 
 
